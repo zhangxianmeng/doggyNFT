@@ -137,12 +137,19 @@
   bottom 0
   right 0
   width 280px
+  height 535px
   color #fff
   background #a457dc
-  padding 20px 0
   text-align center
   line-height 1.5
   border-radius 10px
+  transition all 0.13s ease-in
+  &.close-status {
+    height 40px
+  }
+  .ct {
+    padding 20px 0
+  }
   p {
     padding 0 20px
     img {
@@ -166,6 +173,29 @@
     img {
       width 200px
       border-radius 10px
+    }
+  }
+  .close {
+    position absolute
+    right 0
+    top -5px
+    width 100%
+    // background red
+    padding 10px
+    cursor pointer
+    font-size 24px
+    font-weight 600
+    text-align: right
+  }
+  .giving {
+    display flex
+    align-items center
+    justify-content center
+    cursor pointer
+    line-height: 40px
+    .van-icon {
+      font-size 24px
+      margin-right 5px
     }
   }
 }

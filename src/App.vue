@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <div class="go-top" @click="goTop">
+    <div
+      :class="isPC ? 'pc-go-top' : 'h5-go-top'"
+      class="go-top"
+      @click="goTop"
+    >
       <van-icon name="back-top" />
     </div>
     <!-- <div class="nav" v-if="!isProd">
@@ -18,6 +22,7 @@
 import Vue from 'vue'
 import { Button } from 'vant'
 import { Icon } from 'vant'
+import { isPC } from '@/assets/js/utils'
 
 Vue.use(Icon)
 Vue.use(Button)
@@ -26,6 +31,11 @@ export default {
     return {
       isProd: process.env.NODE_ENV === 'production',
     }
+  },
+  computed: {
+    isPC() {
+      return isPC()
+    },
   },
   methods: {
     goTop() {
@@ -67,6 +77,12 @@ body {
   align-items center
   font-size 30px
   font-weight 600
+  box-shadow 0 0 8px #bbb
+  &.pc-go-top {
+    bottom 50px
+  }
+}
+@media screen {
 }
 </style>
 

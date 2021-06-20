@@ -117,29 +117,45 @@
       <van-icon name="bars" />
     </div>
     <!-- pc悬浮框 -->
-    <div class="fixed-wrapper" v-show="isPC">
-      <p class="talk">
-        <span>如果站点对您有所帮助，可以请作者喝杯咖啡 </span>
-        <img src="../assets/cute.jpg" alt="" />
-        <span>（Like my work? Here's my BSC address）</span>
-      </p>
-      <h4>BSC 钱包地址：</h4>
-      <p class="address">
-        <span>{{ address }}</span>
-        <van-button
-          v-clipboard:copy="address"
-          v-clipboard:success="onCopy"
-          size="small"
-          type="primary"
-          >复制</van-button
-        >
-      </p>
-      <h4>BSC 钱包地址二维码：</h4>
+    <transition name="height">
+      <div
+        :class="isShowFixed ? 'open-status' : 'close-status'"
+        class="fixed-wrapper"
+        v-show="isPC"
+      >
+        <div class="ct" v-show="isShowFixed">
+          <div @click="closeFixed" class="close">
+            <van-icon name="minus" />
+          </div>
+          <p class="talk">
+            <span>如果站点对您有所帮助，可以请作者喝杯咖啡 </span>
+            <img src="../assets/cute.jpg" alt="" />
+            <span>（Like my work? Here's my BSC address）</span>
+          </p>
+          <h4>BSC 钱包地址：</h4>
+          <p class="address">
+            <span>{{ address }}</span>
+            <van-button
+              v-clipboard:copy="address"
+              v-clipboard:success="onCopy"
+              size="small"
+              type="primary"
+              >复制</van-button
+            >
+          </p>
+          <h4>BSC 钱包地址二维码：</h4>
 
-      <p class="qrcode">
-        <img src="../assets/bsc.png" alt="" />
-      </p>
-    </div>
+          <p class="qrcode">
+            <img src="../assets/bsc.png" alt="" />
+          </p>
+        </div>
+
+        <div @click="openFixed" class="giving" v-show="!isShowFixed">
+          <van-icon name="plus" />
+          <span>打赏作者</span>
+        </div>
+      </div>
+    </transition>
 
     <div class="content">
       <div class="doggy-list" v-if="filterDoggyList.length">
@@ -209,25 +225,7 @@ Vue.use(RadioGroup)
 Vue.use(Field)
 Vue.use(Toast)
 import axios from 'axios'
-function isPC() {
-  var userAgentInfo = navigator.userAgent
-  var Agents = new Array(
-    'Android',
-    'iPhone',
-    'SymbianOS',
-    'Windows Phone',
-    'iPad',
-    'iPod'
-  )
-  var flag = true
-  for (var v = 0; v < Agents.length; v++) {
-    if (userAgentInfo.indexOf(Agents[v]) > 0) {
-      flag = false
-      break
-    }
-  }
-  return flag
-}
+import {isPC} from '@/assets/js/utils'
 export default {
   name: 'App',
   components: {},
@@ -354,6 +352,7 @@ export default {
         total: 888,
       },
       isShowFilter: false,
+      isShowFixed: true,
     }
   },
   computed: {
@@ -394,6 +393,12 @@ export default {
     closeMenu() {
       this.isShowFilter = false
       document.body.style.overflow = 'auto'
+    },
+    openFixed() {
+      this.isShowFixed = true
+    },
+    closeFixed() {
+      this.isShowFixed = false
     },
     setDefault() {
       this.checkCollectibleValueList = [
