@@ -1,66 +1,73 @@
 <template>
   <div :class="isPC ? 'pc' : 'h5'">
-    <div class="form-wrapper">
-      <div class="form">
-        <van-field name="check" label="Collectible value">
-          <template #input>
-            <van-checkbox-group
-              v-model="checkCollectibleValueList"
-              direction="horizontal"
-            >
-              <van-checkbox
-                v-for="item in attrs.CollectibleValueList"
-                :key="item.name"
-                :name="item.name"
-                shape="square"
-                >{{ item.name }}</van-checkbox
+    <transition name="slide-left">
+      <div class="form-wrapper" v-show="isShowFilter || isPC">
+        <div class="form">
+          <van-field name="check" label="Collectible value">
+            <template #input>
+              <van-checkbox-group
+                v-model="checkCollectibleValueList"
+                direction="horizontal"
               >
-            </van-checkbox-group>
-          </template>
-        </van-field>
-        <van-field name="check" label="Breed">
-          <template #input>
-            <van-checkbox-group v-model="checkBreedList" direction="horizontal">
-              <van-checkbox
-                v-for="item in attrs.BreedList"
-                :key="item.name"
-                :name="item.name"
-                shape="square"
-                >{{ item.name }}</van-checkbox
+                <van-checkbox
+                  v-for="item in attrs.CollectibleValueList"
+                  :key="item.name"
+                  :name="item.name"
+                  shape="square"
+                  >{{ item.name }}</van-checkbox
+                >
+              </van-checkbox-group>
+            </template>
+          </van-field>
+          <van-field name="check" label="Breed">
+            <template #input>
+              <van-checkbox-group
+                v-model="checkBreedList"
+                direction="horizontal"
               >
-            </van-checkbox-group>
-          </template>
-        </van-field>
-        <van-field name="check" label="Color">
-          <template #input>
-            <van-checkbox-group v-model="checkColorList" direction="horizontal">
-              <van-checkbox
-                v-for="item in attrs.ColorList"
-                :key="item.name"
-                :name="item.name"
-                shape="square"
-                >{{ item.name }}</van-checkbox
+                <van-checkbox
+                  v-for="item in attrs.BreedList"
+                  :key="item.name"
+                  :name="item.name"
+                  shape="square"
+                  >{{ item.name }}</van-checkbox
+                >
+              </van-checkbox-group>
+            </template>
+          </van-field>
+          <van-field name="check" label="Color">
+            <template #input>
+              <van-checkbox-group
+                v-model="checkColorList"
+                direction="horizontal"
               >
-            </van-checkbox-group>
-          </template>
-        </van-field>
-        <van-field name="check" label="Accessory">
-          <template #input>
-            <van-checkbox-group
-              v-model="checkAccessoryList"
-              direction="horizontal"
-            >
-              <van-checkbox
-                v-for="item in attrs.AccessoryList"
-                :key="item.name"
-                :name="item.name"
-                shape="square"
-                >{{ item.name }}</van-checkbox
+                <van-checkbox
+                  v-for="item in attrs.ColorList"
+                  :key="item.name"
+                  :name="item.name"
+                  shape="square"
+                  >{{ item.name }}</van-checkbox
+                >
+              </van-checkbox-group>
+            </template>
+          </van-field>
+          <van-field name="check" label="Accessory">
+            <template #input>
+              <van-checkbox-group
+                v-model="checkAccessoryList"
+                direction="horizontal"
               >
-            </van-checkbox-group>
-          </template>
-        </van-field>
-        <van-field name="check" label="Price">
+                <van-checkbox
+                  v-for="item in attrs.AccessoryList"
+                  :key="item.name"
+                  :name="item.name"
+                  shape="square"
+                  >{{ item.name }}</van-checkbox
+                >
+              </van-checkbox-group>
+            </template>
+          </van-field>
+          <!-- <van-field name="check" label="Price">
           <template #input>
             <van-checkbox-group v-model="checkPriceList" direction="horizontal">
               <van-checkbox
@@ -72,11 +79,69 @@
               >
             </van-checkbox-group>
           </template>
-        </van-field>
+        </van-field> -->
+          <!-- <div class="btn-wrapper">
+          <router-link to="/doggyNFT"
+            ><van-button type="primary">doggyNFT</van-button></router-link
+          >
+        </div> -->
+        </div>
+        <p v-if="isPC" class="total" style="">
+          Total : {{ filterDoggyList.length }} Doggy NFTs
+        </p>
+        <div @click="closeMenu" class="close-menu" v-show="!isPC">
+          <van-icon name="clear" />
+        </div>
+        <div class="my-address" v-show="!isPC">
+          <p class="talk">
+            <span>如果站点对您有所帮助，可以请作者喝杯咖啡 </span>
+            <img src="../assets/cute.jpg" alt="" />
+            <span>（Like my work? Here's my BSC address）</span>
+          </p>
+          <h4>BSC 钱包地址：</h4>
+          <p class="address">
+            <span>{{ address }}</span>
+            <van-button
+              v-clipboard:copy="address"
+              v-clipboard:success="onCopy"
+              size="small"
+              type="primary"
+              >复制</van-button
+            >
+          </p>
+        </div>
       </div>
+    </transition>
+    <!-- h5菜单 -->
+    <div @click="openMenu" class="menu" v-show="!isPC && !isShowFilter">
+      <van-icon name="bars" />
     </div>
+    <!-- pc悬浮框 -->
+    <div class="fixed-wrapper" v-show="isPC">
+      <p class="talk">
+        <span>如果站点对您有所帮助，可以请作者喝杯咖啡 </span>
+        <img src="../assets/cute.jpg" alt="" />
+        <span>（Like my work? Here's my BSC address）</span>
+      </p>
+      <h4>BSC 钱包地址：</h4>
+      <p class="address">
+        <span>{{ address }}</span>
+        <van-button
+          v-clipboard:copy="address"
+          v-clipboard:success="onCopy"
+          size="small"
+          type="primary"
+          >复制</van-button
+        >
+      </p>
+      <h4>BSC 钱包地址二维码：</h4>
+
+      <p class="qrcode">
+        <img src="../assets/bsc.png" alt="" />
+      </p>
+    </div>
+
     <div class="content">
-      <p style="color: red">Total : {{ filterDoggyList.length }} Doggy NFTs</p>
       <div class="doggy-list" v-if="filterDoggyList.length">
         <div class="item" v-for="item in filterDoggyList" :key="item.id">
           <div class="pic">
@@ -87,7 +152,7 @@
             <p>
               <span>Price:</span>
               <span style="color: red; font-size: 20px"
-                >{{ parseInt(Number(item.price) / 10000) }}万 Doggy</span
+                >{{ parseInt(item.price) }} Doggy</span
               >
             </p>
             <p>
@@ -129,7 +194,10 @@ import { Toast } from 'vant'
 import { Checkbox, CheckboxGroup } from 'vant'
 import { Lazyload } from 'vant'
 import { Pagination } from 'vant'
-
+import { Icon } from 'vant'
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
+Vue.use(Icon)
 Vue.use(Pagination)
 Vue.use(Lazyload, {
   loading: require('../assets/logo.png'),
@@ -165,6 +233,7 @@ export default {
   components: {},
   data() {
     return {
+      address: '0x2cE760c6166D4B8876C23EC1A8F28c0F9e5bC48b', //我的钱包地址
       checkCollectibleValueList: [],
       checkBreedList: [],
       checkColorList: [],
@@ -284,6 +353,7 @@ export default {
         size: 500,
         total: 888,
       },
+      isShowFilter: false,
     }
   },
   computed: {
@@ -314,6 +384,17 @@ export default {
     this.getList()
   },
   methods: {
+    onCopy() {
+      Toast('复制成功 （Address copied）')
+    },
+    openMenu() {
+      this.isShowFilter = true
+      document.body.style.overflow = 'hidden'
+    },
+    closeMenu() {
+      this.isShowFilter = false
+      document.body.style.overflow = 'auto'
+    },
     setDefault() {
       this.checkCollectibleValueList = [
         this.attrs.CollectibleValueList[1].name,
@@ -412,84 +493,9 @@ export default {
   },
 }
 </script>
-
-<style lang="stylus" scoped>
-.van-radio--horizontal {
+<style lang="stylus">
+.van-checkbox--horizontal {
   margin-bottom 12px
 }
-.van-cell {
-  background transparent
-}
-.doggy-list {
-  .item {
-    margin 0 auto
-    width 300px
-    background #fff
-    border-radius 10px
-    overflow hidden
-    .pic {
-      width 100%
-      height 400px
-      img {
-        height 100%
-      }
-    }
-    .title {
-      line-height 22px
-      overflow-y hidden
-      font-family 'Baloo Da'
-      font-weight bold
-      font-size 22px
-      color rgb(172, 86, 42)
-      padding 10px
-    }
-    .attrs {
-      padding 10px
-      p {
-        margin 5px 0
-        display flex
-        justify-content space-between
-        color rgb(172, 86, 42)
-        span {
-          &:last-child {
-            font-weight 600
-          }
-        }
-      }
-    }
-  }
-}
-.pc {
-  .form-wrapper {
-    background rgb(255, 243, 224)
-    position fixed
-    left 0
-    top 0
-    width 100%
-    .form {
-      width 1260px
-      margin 0 auto
-    }
-  }
-  .content {
-    padding-top 244px
-    width 1260px
-    margin 0 auto
-  }
-  .doggy-list {
-    overflow hidden
-    .item {
-      float left
-      margin-right 20px
-      margin-bottom 20px
-      &:nth-of-type(4n) {
-        margin-right 0
-      }
-    }
-  }
-}
-.no-data {
-  margin-top 50px
-  text-align center
-}
 </style>
+<style lang="stylus" scoped src="./doggyNFT.styl"></style>
