@@ -1,125 +1,122 @@
 <template>
-  <div  :class="isPC ? 'pc' : 'h5'">
-    <div class="form">
-      <van-field name="check" label="Collectible value">
-        <template #input>
-          <van-checkbox-group
-            v-model="checkCollectibleValueList"
-            direction="horizontal"
-          >
-            <van-checkbox
-              v-for="item in attrs.CollectibleValueList"
-              :key="item.name"
-              :name="item.name"
-              shape="square"
-              >{{ item.name }}</van-checkbox
+  <div :class="isPC ? 'pc' : 'h5'">
+    <div class="form-wrapper">
+      <div class="form">
+        <van-field name="check" label="Collectible value">
+          <template #input>
+            <van-checkbox-group
+              v-model="checkCollectibleValueList"
+              direction="horizontal"
             >
-          </van-checkbox-group>
-        </template>
-      </van-field>
-      <van-field name="check" label="Breed">
-        <template #input>
-          <van-checkbox-group v-model="checkBreedList" direction="horizontal">
-            <van-checkbox
-              v-for="item in attrs.BreedList"
-              :key="item.name"
-              :name="item.name"
-              shape="square"
-              >{{ item.name }}</van-checkbox
+              <van-checkbox
+                v-for="item in attrs.CollectibleValueList"
+                :key="item.name"
+                :name="item.name"
+                shape="square"
+                >{{ item.name }}</van-checkbox
+              >
+            </van-checkbox-group>
+          </template>
+        </van-field>
+        <van-field name="check" label="Breed">
+          <template #input>
+            <van-checkbox-group v-model="checkBreedList" direction="horizontal">
+              <van-checkbox
+                v-for="item in attrs.BreedList"
+                :key="item.name"
+                :name="item.name"
+                shape="square"
+                >{{ item.name }}</van-checkbox
+              >
+            </van-checkbox-group>
+          </template>
+        </van-field>
+        <van-field name="check" label="Color">
+          <template #input>
+            <van-checkbox-group v-model="checkColorList" direction="horizontal">
+              <van-checkbox
+                v-for="item in attrs.ColorList"
+                :key="item.name"
+                :name="item.name"
+                shape="square"
+                >{{ item.name }}</van-checkbox
+              >
+            </van-checkbox-group>
+          </template>
+        </van-field>
+        <van-field name="check" label="Accessory">
+          <template #input>
+            <van-checkbox-group
+              v-model="checkAccessoryList"
+              direction="horizontal"
             >
-          </van-checkbox-group>
-        </template>
-      </van-field>
-      <van-field name="check" label="Color">
-        <template #input>
-          <van-checkbox-group v-model="checkColorList" direction="horizontal">
-            <van-checkbox
-              v-for="item in attrs.ColorList"
-              :key="item.name"
-              :name="item.name"
-              shape="square"
-              >{{ item.name }}</van-checkbox
-            >
-          </van-checkbox-group>
-        </template>
-      </van-field>
-      <van-field name="check" label="Accessory">
-        <template #input>
-          <van-checkbox-group
-            v-model="checkAccessoryList"
-            direction="horizontal"
-          >
-            <van-checkbox
-              v-for="item in attrs.AccessoryList"
-              :key="item.name"
-              :name="item.name"
-              shape="square"
-              >{{ item.name }}</van-checkbox
-            >
-          </van-checkbox-group>
-        </template>
-      </van-field>
-      <van-field name="check" label="Price">
-        <template #input>
-          <van-checkbox-group v-model="checkPriceList" direction="horizontal">
-            <van-checkbox
-              v-for="item in attrs.PriceList"
-              :key="item.name"
-              :name="item.name"
-              shape="square"
-              >{{ item.name }}</van-checkbox
-            >
-          </van-checkbox-group>
-        </template>
-      </van-field>
-    </div>
-    <p style="color: red">Total : {{ filterDoggyList.length }} Doggy NFTs</p>
-    <div class="doggy-list" v-if="filterDoggyList.length">
-      <div class="item" v-for="item in filterDoggyList" :key="item.id">
-        <div class="pic">
-          <img v-lazy="item.imageUrl" alt="" />
-        </div>
-        <div class="title">Crypto Doggy # {{ item.nftId }}</div>
-        <div class="attrs">
-          <p>
-            <span>Price:</span>
-            <span style="color:red;font-size:20px">{{ parseInt(Number(item.price)/10000) }}万 Doggy</span>
-          </p>
-          <p>
-            <span>Breed:</span>
-            <span>{{ item.attributes.breed }} </span>
-          </p>
-          <p>
-            <span>Color:</span>
-            <span>{{ item.attributes.color }} </span>
-          </p>
-          <p>
-            <span>Accessory:</span>
-            <span>{{ item.attributes.accessoryType }} </span>
-          </p>
-          <p>
-            <span>Collectible value:</span>
-            <span>{{ item.attributes.collectibleValue }} </span>
-          </p>
-          <p>
-            <span>Rare:</span>
-            <span>{{ item.attributes.rare }} </span>
-          </p>
-        </div>
+              <van-checkbox
+                v-for="item in attrs.AccessoryList"
+                :key="item.name"
+                :name="item.name"
+                shape="square"
+                >{{ item.name }}</van-checkbox
+              >
+            </van-checkbox-group>
+          </template>
+        </van-field>
+        <van-field name="check" label="Price">
+          <template #input>
+            <van-checkbox-group v-model="checkPriceList" direction="horizontal">
+              <van-checkbox
+                v-for="item in attrs.PriceList"
+                :key="item.name"
+                :name="item.name"
+                shape="square"
+                >{{ item.name }}</van-checkbox
+              >
+            </van-checkbox-group>
+          </template>
+        </van-field>
       </div>
     </div>
-    <div>
-      <van-pagination
-        v-model="pagation.page"
-        :total-items="pagation.total"
-        :show-page-size="pagation.size"
-        force-ellipses
-        mode="simple"
-      />
-    </div>
-    <div class="no-data" v-if="!filterDoggyList.length">
-      <img src="../assets/no-data.svg" alt="" />
-      <p>no-data</p>
+    <div class="content">
+      <p style="color: red">Total : {{ filterDoggyList.length }} Doggy NFTs</p>
+      <div class="doggy-list" v-if="filterDoggyList.length">
+        <div class="item" v-for="item in filterDoggyList" :key="item.id">
+          <div class="pic">
+            <img v-lazy="item.imageUrl" alt="" />
+          </div>
+          <div class="title">Crypto Doggy # {{ item.nftId }}</div>
+          <div class="attrs">
+            <p>
+              <span>Price:</span>
+              <span style="color: red; font-size: 20px"
+                >{{ parseInt(Number(item.price) / 10000) }}万 Doggy</span
+              >
+            </p>
+            <p>
+              <span>Breed:</span>
+              <span>{{ item.attributes.breed }} </span>
+            </p>
+            <p>
+              <span>Color:</span>
+              <span>{{ item.attributes.color }} </span>
+            </p>
+            <p>
+              <span>Accessory:</span>
+              <span>{{ item.attributes.accessoryType }} </span>
+            </p>
+            <p>
+              <span>Collectible value:</span>
+              <span>{{ item.attributes.collectibleValue }} </span>
+            </p>
+            <p>
+              <span>Rare:</span>
+              <span>{{ item.attributes.rare }} </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="no-data" v-if="!filterDoggyList.length">
+        <img src="../assets/no-data.svg" alt="" />
+        <p>no-data</p>
+      </div>
     </div>
   </div>
 </template>
@@ -319,6 +316,7 @@ export default {
   methods: {
     setDefault() {
       this.checkCollectibleValueList = [
+        this.attrs.CollectibleValueList[1].name,
         this.attrs.CollectibleValueList[3].name,
         this.attrs.CollectibleValueList[4].name,
       ]
@@ -333,14 +331,42 @@ export default {
       defaultAccessoryList.pop()
       this.checkAccessoryList = defaultAccessoryList
     },
-    getList() {
-      // const url = 'https://www.bakeryswap.org/api/v2/nfts?nftType=104&offset=2&limit=500&sortName=price&sortBy=asc&onSale=1&status=1&keyword='
+    async getList() {
+      const toast = Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true,
+        message: '正在加载数据',
+      })
+      let totalList = []
       let url = 'https://www.bakeryswap.org/api/v2/nfts'
-      axios
-        .get(url, {
+      // 第一页
+      const result = await axios.get(url, {
+        params: {
+          nftType: '104',
+          offset: 0,
+          limit: 500,
+          sortName: 'price',
+          sortBy: 'asc',
+          onSale: 1,
+        },
+      })
+      let pageCount = 0
+      if (result.data.code === 0) {
+        totalList = [...result.data.data.list]
+        pageCount = Math.ceil(result.data.data.count / 500)
+        if (pageCount === 1) {
+          toast.clear()
+        }
+      } else {
+        Toast('network busy, try it again')
+        toast.clear()
+      }
+      // 第二页
+      if (pageCount === 2) {
+        const result2 = await axios.get(url, {
           params: {
             nftType: '104',
-            offset: 100,
+            offset: 500,
             limit: 500,
             sortName: 'price',
             sortBy: 'asc',
@@ -348,20 +374,46 @@ export default {
             Breed: 'Pug',
           },
         })
-        .then((res) => {
-          if (res.data.code === 0) {
-            this.doggyList = res.data.data.list
-          } else {
-            Toast('network busy, try it again')
+        if (result2.data.code === 0) {
+          totalList = [...totalList, ...result2.data.data.list]
+          if (pageCount === 2) {
+            toast.clear()
           }
+        } else {
+          Toast('network busy, try it again')
+          toast.clear()
+        }
+      }
+      // 第三页
+      if (pageCount === 3) {
+        const result3 = await axios.get(url, {
+          params: {
+            nftType: '104',
+            offset: 1000,
+            limit: 500,
+            sortName: 'price',
+            sortBy: 'asc',
+            onSale: 1,
+            Breed: 'Pug',
+          },
         })
+        if (result3.data.code === 0) {
+          totalList = [...totalList, ...result3.data.data.list]
+          if (pageCount === 2) {
+            toast.clear()
+          }
+        } else {
+          Toast('network busy, try it again')
+          toast.clear()
+        }
+      }
+      this.doggyList = totalList
     },
   },
 }
 </script>
 
 <style lang="stylus" scoped>
-
 .van-radio--horizontal {
   margin-bottom 12px
 }
@@ -377,7 +429,7 @@ export default {
     overflow hidden
     .pic {
       width 100%
-      height 150px
+      height 400px
       img {
         height 100%
       }
@@ -408,8 +460,22 @@ export default {
   }
 }
 .pc {
-  width 1260px
-  margin 0 auto
+  .form-wrapper {
+    background rgb(255, 243, 224)
+    position fixed
+    left 0
+    top 0
+    width 100%
+    .form {
+      width 1260px
+      margin 0 auto
+    }
+  }
+  .content {
+    padding-top 244px
+    width 1260px
+    margin 0 auto
+  }
   .doggy-list {
     overflow hidden
     .item {

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="nav">
+    <div class="nav" v-if="!isProd">
       <router-link to="/doggyNFT"
         ><van-button type="primary">doggyNFT</van-button></router-link
       >
@@ -11,10 +11,21 @@
     <router-view />
   </div>
 </template>
-<style lang="stylus" scoped>
-body,#app {
+<script>
+export default {
+  data() {
+    return {
+      isProd: process.env.NODE_ENV === 'production',
+    }
+  },
+}
+</script>
+<style lang="stylus">
+body {
   background rgb(255, 243, 224)
 }
+</style>
+<style lang="stylus" scoped>
 .nav {
   text-align center
   padding 30px 0
